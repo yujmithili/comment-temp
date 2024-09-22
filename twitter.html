@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Twitter Auto Comment</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .comment-list {
+      margin-bottom: 20px;
+    }
+    .comment-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .comment-text {
+      width: 70%;
+    }
+    .post-button {
+      background-color: #1DA1F2;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Choose Any Comment to Post on Twitter</h1>
+  
+  <div id="commentSection" class="comment-list">
+    <!-- Comments will be dynamically loaded here -->
+  </div>
+
+  <script>
+    const predefinedComments = [
+    "Totally agree with @Gurudev @SriSri. Sacred offerings should never be compromised! It's time to hold those involved accountable. #FreeHinduTemples",
+
+ "Fully support @Gurudev @SriSri’s call for stricter regulations on prasadam purity. Spiritual oversight is the way forward. #FreeHinduTemples",
+ "Corruption in sacred practices cannot be tolerated. I stand with @Gurudev @SriSri in demanding stringent action. #FreeHinduTemples",
+
+ "Agree with @Gurudev @SriSri! Temple management must be in the hands of spiritual leaders to preserve the sanctity of our traditions. #FreeHinduTemples",
+
+ "100% with @Gurudev @SriSri. We must ensure that our sacred offerings remain pure. The time for reform is now! #FreeHinduTemples",
+
+ "Food adulteration in temples is unacceptable. I support @Gurudev @SriSri in his call for strong penalties. #FreeHinduTemples",
+
+"Completely agree with @Gurudev @SriSri. Temple management should be in the hands of saints, not bureaucrats. #FreeHinduTemples",
+
+ "Well said, @Gurudev @SriSri! Spiritual oversight is crucial to maintaining the purity of our temple offerings. #FreeHinduTemples",
+
+ "With @Gurudev @SriSri on this! Sacred prasadam must be pure, and those responsible for adulteration must face consequences. #FreeHinduTemples",
+
+ "I fully back @Gurudev @SriSri’s stance. Our temples and traditions must be protected from greed and corruption. #FreeHinduTemples",
+
+ "Totally with @Gurudev @SriSri on this. Sacred traditions need to be preserved by those who truly respect them. #FreeHinduTemples",
+
+ "Strongly agree with @Gurudev @SriSri. Prasadam purity is non-negotiable. Accountability is key! #FreeHinduTemples",
+
+ "Support @Gurudev @SriSri’s call for spiritual oversight in temple management. We must protect our sacred practices. #FreeHinduTemples",
+
+ "Fully back @Gurudev @SriSri. It’s time to ensure that temple offerings are handled with the utmost sanctity. #FreeHinduTemples",
+
+"Agree with @Gurudev @SriSri, our spiritual spaces need to be protected from greed and mismanagement. #FreeHinduTemples",
+
+ "Stand with @Gurudev @SriSri. Temple administration should be in the hands of saints who understand the spiritual essence. #FreeHinduTemples",
+
+ "Absolutely support @Gurudev @SriSri’s stance on ensuring sacred prasadam remains pure and unadulterated. #FreeHinduTemples",
+
+ "With @Gurudev @SriSri! Sacred practices and offerings must be safeguarded from corruption. #FreeHinduTemples",
+
+ "Completely agree with @Gurudev @SriSri. Spiritual leadership in temple management is essential to maintain purity. #FreeHinduTemples",
+
+ "100% agree with @Gurudev @SriSri. Time for strict measures to protect sacred prasadam from corruption. #FreeHinduTemples",
+
+"Support @Gurudev @SriSri’s call for spiritual leaders to oversee temples. Tradition and purity must be maintained! #FreeHinduTemples",
+
+ "Agree with @Gurudev @SriSri. Sacred prasadam cannot be compromised. Accountability is crucial! #FreeHinduTemples",
+
+ "With @Gurudev @SriSri on this! It’s time to restore spiritual sanctity in temple management. #FreeHinduTemples",
+
+ "Fully back @Gurudev @SriSri. Protecting the integrity of our religious offerings is critical! #FreeHinduTemples",
+
+"I stand with @Gurudev @SriSri. Sacred temple traditions must be safeguarded by spiritual leaders, not bureaucrats. #FreeHinduTemples",
+ "Agree 100% with @Gurudev @SriSri. We need spiritual leaders to manage temples, ensuring purity and integrity. #FreeHinduTemples",
+
+"With @Gurudev @SriSri! It’s time to take action against those who compromise the sanctity of sacred offerings. #FreeHinduTemples",
+    ];
+
+ // Hardcoded Tweet ID for the specific tweet
+ // Hardcoded Tweet ID for the specific tweet
+ const tweetId = '1837719823603978247';
+    const tweetUrl = 'https://x.com/ani/status/1837719823603978247?s=46&t=Pm93JjPRrpWBo0LmfShFQg';
+
+    function createCommentElement(comment) {
+      const commentItem = document.createElement('div');
+      commentItem.className = 'comment-item';
+
+      const commentText = document.createElement('div');
+      commentText.className = 'comment-text';
+      commentText.textContent = comment;
+
+      const buttonGroup = document.createElement('div');
+      buttonGroup.className = 'button-group';
+
+      // Post button
+      const postButton = document.createElement('button');
+      postButton.className = 'post-button';
+      postButton.textContent = 'Post';
+      postButton.onclick = () => postComment(comment);
+
+      // Copy button
+      const copyButton = document.createElement('button');
+      copyButton.className = 'copy-button';
+      copyButton.textContent = 'Copy';
+      copyButton.onclick = () => copyCommentToClipboard(comment);
+
+      // Anchor link to the tweet
+      const tweetLink = document.createElement('a');
+      tweetLink.className = 'tweet-link';
+      tweetLink.href = tweetUrl;
+      tweetLink.target = '_blank';  // Open in a new tab
+      tweetLink.textContent = 'View Tweet';
+
+      buttonGroup.appendChild(postButton);
+      buttonGroup.appendChild(copyButton);
+      buttonGroup.appendChild(tweetLink);  // Add the anchor tag
+
+      commentItem.appendChild(commentText);
+      commentItem.appendChild(buttonGroup);
+
+      return commentItem;
+    }
+
+    function loadComments() {
+      const commentSection = document.getElementById('commentSection');
+      predefinedComments.forEach(comment => {
+        const commentElement = createCommentElement(comment);
+        commentSection.appendChild(commentElement);
+      });
+    }
+
+    async function postComment(comment) {
+      try {
+        const response = await fetch('/api/postComment', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ tweetId, comment })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          alert('Comment posted successfully!');
+        } else {
+          alert('Failed to post the comment');
+        }
+      } catch (error) {
+        console.error('Error posting comment:', error);
+      }
+    }
+
+    function copyCommentToClipboard(comment) {
+      navigator.clipboard.writeText(comment)
+        .then(() => {
+          alert('Comment copied to clipboard: ' + comment);
+        })
+        .catch(err => {
+          console.error('Failed to copy text: ', err);
+        });
+    }
+
+    window.onload = loadComments;
+  </script>
+</body>
+</html>
